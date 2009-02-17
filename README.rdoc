@@ -4,7 +4,7 @@ Allows you to include extra data within the body of e-mail messages for use in a
 
 =Settings
 
-If you need to override the scanner to create your own custom syntax, you can open up the class and change it:
+If you need to override the default scanner you can run this:
 
   TMail::Metas.scanner = /Metas\((.*)\)/
   TMail::Metas.scanner_options = {:seperator => ':', :group_seperator => ','}
