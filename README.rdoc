@@ -1,0 +1,35 @@
+=TMail Meta Data Functionality
+
+Allows you to include extra data within the body of e-mail messages for use in automated parsing through TMail.
+
+=Settings
+
+If you need to override the scanner to create your own custom syntax, you can open up the class and change it:
+
+  TMail::Metas.scanner = /Metas\((.*)\)/
+  TMail::Metas.scanner_options = {:seperator => ':', :group_seperator => ','}
+  
+  # which will look for this:
+  # Metas(project_id:12,type:message)
+
+=Example
+
+  %w{pp rubygems tmail tmail_metas}.each { |lib| require lib }
+
+  EMAIL = <<-end
+  To: you@example.com
+  From: me@example.com
+  Subject: This is my automated email
+
+  This is an email which will be automatically handled by a ruby script!
+  The body will be stripped of these meta tags while they are made available
+  in the mail.metas hash.
+
+  {{project_id=12345&category=Incoming Emails&create=message}}
+
+  end
+
+  mail = TMail::Mail.parse(EMAIL)
+
+  pp mail.metas # => {"category"=>"Incoming Emails", "project_id"=>"12345", "create"=>"message"}
+  pp mail.body  # => (body with the {{...}} metas stripped)
